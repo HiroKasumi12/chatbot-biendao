@@ -143,25 +143,33 @@ async function sendMessage(){
                 headers:{ "Content-Type":"application/json" },
                 body:JSON.stringify({
                     contents:[{
-                        parts:[{text:"Bạn là chuyên gia về chủ quyền biển đảo Việt Nam. "+text}]
+                        parts:[{
+                            text:"Bạn là chuyên gia về chủ quyền biển đảo Việt Nam. Trả lời ngắn gọn, rõ ràng. Câu hỏi: "+text
+                        }]
                     }]
                 })
             }
         );
 
         const data = await response.json();
+        console.log("FULL API RESPONSE:", data);
+
         loading.remove();
+
+        if(data.error){
+            addMessage("LỖI API: " + data.error.message,"bot");
+            return;
+        }
 
         if(data.candidates){
             addMessage(data.candidates[0].content.parts[0].text,"bot");
         }else{
-            console.log(data);
-            addMessage("API lỗi hoặc hết quota.","bot");
+            addMessage("Không có dữ liệu trả về.","bot");
         }
 
     }catch(error){
         loading.remove();
-        addMessage("Không kết nối được API.","bot");
+        addMessage("Lỗi kết nối: " + error.message,"bot");
         console.error(error);
     }
 }
