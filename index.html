@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chatbot Biển Đảo Việt Nam</title>
+<title>Chatbot Biển Đảo</title>
 
 <style>
 body{
@@ -12,11 +12,9 @@ body{
     background:linear-gradient(to bottom,#6db3f2,#e6f4ff);
 }
 
-/* ===== Banner ===== */
 .banner{
     display:flex;
-    width:100%;
-    height:220px;
+    height:200px;
 }
 
 .banner div{
@@ -29,200 +27,8 @@ body{
     justify-content:center;
     color:white;
     font-weight:bold;
-    font-size:20px;
 }
 
-.banner div::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,0.4);
-}
-
-.banner span{
-    position:relative;
-    margin-bottom:18px;
-    z-index:2;
-}
-
-/* Ảnh online ổn định */
-.hoangsa{
-    background-image:url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80");
-}
-
-.truongsa{
-    background-image:url("https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80");
-}
-
-/* ===== Title ===== */
-.title{
-    text-align:center;
-    margin-top:15px;
-}
-
-.title h1{
-    margin:5px;
-    color:#003c7a;
-}
-
-.title p{
-    margin:0;
-    color:#333;
-}
-
-/* ===== Chatbox ===== */
-.chat-container{
-    width:95%;
-    max-width:750px;
-    height:60vh;
-    background:white;
-    margin:20px auto;
-    border-radius:25px;
-    box-shadow:0 12px 35px rgba(0,0,0,0.25);
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-}
-
-.chat-box{
-    flex:1;
-    padding:15px;
-    overflow-y:auto;
-    background:linear-gradient(to bottom,#f8fbff,#eef6ff);
-}
-
-.message{
-    margin-bottom:12px;
-    padding:10px 14px;
-    border-radius:18px;
-    max-width:75%;
-    line-height:1.4;
-    animation:fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn{
-    from{opacity:0;transform:translateY(5px);}
-    to{opacity:1;transform:translateY(0);}
-}
-
-.user{
-    background:#2f6df6;
-    color:white;
-    margin-left:auto;
-}
-
-.bot{
-    background:white;
-    border:1px solid #ddd;
-}
-
-.input-area{
-    display:flex;
-    border-top:1px solid #ddd;
-}
-
-input{
-    flex:1;
-    padding:14px;
-    border:none;
-    font-size:16px;
-    outline:none;
-}
-
-button{
-    padding:14px 18px;
-    border:none;
-    background:#2f6df6;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#1f55cc;
-}
-</style>
-</head>
-
-<body>
-
-<div class="banner">
-    <div class="hoangsa"><span>Quần đảo Hoàng Sa</span></div>
-    <div class="truongsa"><span>Quần đảo Trường Sa</span></div>
-</div>
-
-<div class="title">
-    <h1>🌊 Chatbot Biển Đảo Việt Nam</h1>
-    <p>Tìm hiểu về Hoàng Sa – Trường Sa 🇻🇳</p>
-</div>
-
-<div class="chat-container">
-    <div class="chat-box" id="chatBox"></div>
-    <div class="input-area">
-        <input id="userInput" placeholder="Hỏi về biển đảo..." />
-        <button onclick="sendMessage()">Gửi</button>
-    </div>
-</div>
-
-<script>
-const API_KEY = "DAN_API_KEY_CUA_BAN_VAO_DAY";
-
-async function sendMessage(){
-    const input=document.getElementById("userInput");
-    const chatBox=document.getElementById("chatBox");
-    const text=input.value.trim();
-    if(!text) return;
-
-    addMessage(text,"user");
-    input.value="";
-    addMessage("Đang suy nghĩ...","bot");
-
-    try{
-        const response=await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY,
-            {
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({
-                    contents:[{
-                        parts:[{
-                            text:"Bạn là chuyên gia giáo dục về chủ quyền biển đảo Việt Nam. Trả lời rõ ràng, chính xác, dễ hiểu: "+text
-                        }]
-                    }]
-                })
-            }
-        );
-
-        const data=await response.json();
-        document.querySelector(".bot:last-child").remove();
-
-        if(data.candidates){
-            const botText=data.candidates[0].content.parts[0].text;
-            addMessage(botText,"bot");
-        }else{
-            addMessage("API lỗi hoặc hết quota miễn phí.","bot");
-        }
-
-    }catch(error){
-        document.querySelector(".bot:last-child").remove();
-        addMessage("Không kết nối được tới AI.","bot");
-    }
-}
-
-function addMessage(text,sender){
-    const chatBox=document.getElementById("chatBox");
-    const msg=document.createElement("div");
-    msg.classList.add("message",sender);
-    msg.innerText=text;
-    chatBox.appendChild(msg);
-    chatBox.scrollTop=chatBox.scrollHeight;
-}
-</script>
-
-</body>
-</html>.title h1{
-    margin:5px;
-    color:#003c
 .banner div::after{
     content:"";
     position:absolute;
@@ -237,36 +43,24 @@ function addMessage(text,sender){
 }
 
 .hoangsa{
-    background-image:url("https://upload.wikimedia.org/wikipedia/commons/3/3a/Truong_Sa_Islands.jpg");
+    background-image:url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80");
 }
 
 .truongsa{
-    background-image:url("https://upload.wikimedia.org/wikipedia/commons/5/54/Hoang_Sa_Islands.jpg");
+    background-image:url("https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80");
 }
 
-/* ===== Tiêu đề ===== */
 .title{
     text-align:center;
     margin-top:20px;
 }
 
-.title h1{
-    margin:5px;
-    color:#005fa3;
-}
-
-.title p{
-    margin:0;
-    color:#333;
-}
-
-/* ===== Chatbox ===== */
 .chat-container{
     width:95%;
     max-width:700px;
-    height:65vh;
+    height:60vh;
     background:white;
-    margin-top:20px;
+    margin:20px auto;
     border-radius:25px;
     box-shadow:0 10px 30px rgba(0,0,0,0.25);
     display:flex;
@@ -292,19 +86,17 @@ function addMessage(text,sender){
 .user{
     background:#2f6df6;
     color:white;
-    align-self:flex-end;
+    margin-left:auto;
 }
 
 .bot{
     background:white;
     border:1px solid #ddd;
-    align-self:flex-start;
 }
 
 .input-area{
     display:flex;
     border-top:1px solid #ddd;
-    background:white;
 }
 
 input{
@@ -322,11 +114,6 @@ button{
     color:white;
     font-weight:bold;
     cursor:pointer;
-    border-radius:0 0 25px 0;
-}
-
-button:hover{
-    background:#1f55cc;
 }
 </style>
 </head>
@@ -340,7 +127,6 @@ button:hover{
 
 <div class="title">
     <h1>🌊 Chatbot Biển Đảo Việt Nam</h1>
-    <p>Tìm hiểu về Hoàng Sa – Trường Sa 🇻🇳</p>
 </div>
 
 <div class="chat-container">
@@ -352,11 +138,10 @@ button:hover{
 </div>
 
 <script>
-const API_KEY = "AIzaSyBnjew3Qbj85CR1U8aEisvn2hOpBHaAkAg";
+const API_KEY="AIzaSyAF7_1vCQIqso7LpRMmjrcqPo8pq3JGB68";
 
 async function sendMessage(){
     const input=document.getElementById("userInput");
-    const chatBox=document.getElementById("chatBox");
     const text=input.value.trim();
     if(!text) return;
 
@@ -364,24 +149,33 @@ async function sendMessage(){
     input.value="";
     addMessage("Đang suy nghĩ...","bot");
 
-    const response=await fetch(
-        ""https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY,
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({
-                contents:[{
-                    parts:[{
-                        text:"Bạn là chuyên gia giáo dục về chủ quyền biển đảo Việt Nam. Trả lời ngắn gọn, chính xác, dễ hiểu: "+text
+    try{
+        const response=await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY,
+            {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    contents:[{
+                        parts:[{text:text}]
                     }]
-                }]
-            })
-        }
-    );
+                })
+            }
+        );
 
-    const data=await response.json();
-    document.querySelector(".bot:last-child").remove();
-    const botText=data.candidates[0].content.parts[0].text;
-    addMessage(botText,"bot");
+        const data=await response.json();
+        document.querySelector(".bot:last-child").remove();
+
+        if(data.candidates){
+            addMessage(data.candidates[0].content.parts[0].text,"bot");
+        }else{
+            addMessage("API lỗi hoặc hết quota.","bot");
+        }
+
+    }catch{
+        document.querySelector(".bot:last-child").remove();
+        addMessage("Không kết nối được tới AI.","bot");
+    }
 }
 
 function addMessage(text,sender){
