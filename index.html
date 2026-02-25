@@ -148,38 +148,40 @@ async function sendMessage(){
 
     addMessage(text,"user");
     input.value="";
-    addMessage("Đang suy nghĩ...","bot");
+    const loadingMsg = addMessage("Đang suy nghĩ...","bot");
 
     try{
         const response=await fetch("https://openrouter.ai/api/v1/chat/completions",{
             method:"POST",
             headers:{
-    "Content-Type":"application/json",
-    "Authorization":"Bearer "+API_KEY,
-    "HTTP-Referer":"https://hirokasumi12.github.io/",
-    "X-Title":"Chatbot Bien Dao"
-},
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+API_KEY,
+                "HTTP-Referer":"https://hirokasumi12.github.io",
+                "X-Title":"Chatbot Bien Dao"
+            },
             body:JSON.stringify({
-                model:"openai/gpt-3.5-turbo",
+                model:"mistralai/mistral-7b-instruct",
                 messages:[
-                    {role:"system",content:"Bạn là chuyên gia giáo dục về chủ quyền biển đảo Việt Nam."},
+                    {role:"system",content:"Bạn là chuyên gia giáo dục về chủ quyền biển đảo Việt Nam. Trả lời ngắn gọn, rõ ràng."},
                     {role:"user",content:text}
                 ]
             })
         });
 
         const data=await response.json();
-        document.querySelector(".bot:last-child").remove();
+        loadingMsg.remove();
 
         if(data.choices){
             addMessage(data.choices[0].message.content,"bot");
         }else{
+            console.log(data);
             addMessage("API lỗi hoặc hết quota.","bot");
         }
 
-    }catch{
-        document.querySelector(".bot:last-child").remove();
+    }catch(error){
+        loadingMsg.remove();
         addMessage("Không kết nối được API.","bot");
+        console.error(error);
     }
 }
 
@@ -190,6 +192,7 @@ function addMessage(text,sender){
     msg.innerText=text;
     chatBox.appendChild(msg);
     chatBox.scrollTop=chatBox.scrollHeight;
+    return msg;
 }
 
 </script>
