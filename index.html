@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chatbot Biển Đảo</title>
+<title>Chatbot Biển Đảo Việt Nam</title>
 
 <style>
 body{
@@ -138,7 +138,8 @@ button{
 </div>
 
 <script>
-const API_KEY="AIzaSyBxdloNUJOghN1uIS7nqEatIBbySb4K1gg";
+
+const API_KEY="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";
 
 async function sendMessage(){
     const input=document.getElementById("userInput");
@@ -150,31 +151,33 @@ async function sendMessage(){
     addMessage("Đang suy nghĩ...","bot");
 
     try{
-        const response=await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY,
-            {
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({
-                    contents:[{
-                        parts:[{text:text}]
-                    }]
-                })
-            }
-        );
+        const response=await fetch("https://openrouter.ai/api/v1/chat/completions",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+API_KEY
+            },
+            body:JSON.stringify({
+                model:"openai/gpt-3.5-turbo",
+                messages:[
+                    {role:"system",content:"Bạn là chuyên gia giáo dục về chủ quyền biển đảo Việt Nam."},
+                    {role:"user",content:text}
+                ]
+            })
+        });
 
         const data=await response.json();
         document.querySelector(".bot:last-child").remove();
 
-        if(data.candidates){
-            addMessage(data.candidates[0].content.parts[0].text,"bot");
+        if(data.choices){
+            addMessage(data.choices[0].message.content,"bot");
         }else{
             addMessage("API lỗi hoặc hết quota.","bot");
         }
 
     }catch{
         document.querySelector(".bot:last-child").remove();
-        addMessage("Không kết nối được tới AI.","bot");
+        addMessage("Không kết nối được API.","bot");
     }
 }
 
@@ -186,6 +189,7 @@ function addMessage(text,sender){
     chatBox.appendChild(msg);
     chatBox.scrollTop=chatBox.scrollHeight;
 }
+
 </script>
 
 </body>
