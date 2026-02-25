@@ -157,8 +157,8 @@ async function sendMessage(){
         loading.remove();
 
         if(data.error){
-            addMessage("LỖI API: " + data.error.message,"bot");
-            return;
+    addMessage("LỖI API: " + JSON.stringify(data.error),"bot");
+    return;
         }
 
         if(data.candidates){
