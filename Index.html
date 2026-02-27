@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Biển Đảo Việt Nam</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Segoe UI, sans-serif;
+    background:linear-gradient(to bottom,#6db3f2,#e6f4ff);
+}
+.banner{
+    display:flex;
+    height:200px;
+}
+.banner div{
+    flex:1;
+    background-size:cover;
+    background-position:center;
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    color:white;
+    font-weight:bold;
+}
+.banner div::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.35);
+}
+.banner span{
+    position:relative;
+    margin-bottom:15px;
+    z-index:2;
+}
+.hoangsa{
+    background-image:url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80");
+}
+.truongsa{
+    background-image:url("https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80");
+}
+.title{
+    text-align:center;
+    margin-top:20px;
+}
+.chat-container{
+    width:95%;
+    max-width:700px;
+    height:60vh;
+    background:white;
+    margin:20px auto;
+    border-radius:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+.chat-box{
+    flex:1;
+    padding:20px;
+    overflow-y:auto;
+    background:linear-gradient(to bottom,#f8fbff,#eef6ff);
+}
+.message{
+    margin-bottom:15px;
+    padding:12px 16px;
+    border-radius:18px;
+    max-width:75%;
+    line-height:1.4;
+}
+.user{
+    background:#2f6df6;
+    color:white;
+    margin-left:auto;
+}
+.bot{
+    background:white;
+    border:1px solid #ddd;
+}
+.input-area{
+    display:flex;
+    border-top:1px solid #ddd;
+}
+input{
+    flex:1;
+    padding:15px;
+    border:none;
+    font-size:16px;
+    outline:none;
+}
+button{
+    padding:15px 20px;
+    border:none;
+    background:#2f6df6;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="banner">
+    <div class="hoangsa"><span>Quần đảo Hoàng Sa</span></div>
+    <div class="truongsa"><span>Quần đảo Trường Sa</span></div>
+</div>
+
+<div class="title">
+    <h1>🌊 Chatbot Biển Đảo Việt Nam</h1>
+</div>
+
+<div class="chat-container">
+    <div class="chat-box" id="chatBox"></div>
+    <div class="input-area">
+        <input id="userInput" placeholder="Hỏi về biển đảo..." />
+        <button onclick="sendMessage()">Gửi</button>
+    </div>
+</div>
+
+<script>
+async function sendMessage(){
+    const input = document.getElementById("userInput");
+    const text = input.value.trim();
+    if(!text) return;
+
+    addMessage(text,"user");
+    input.value="";
+    const loading = addMessage("Đang suy nghĩ...","bot");
+
+    try{
+        const response = await fetch("/api/chat",{
+            method:"POST",
+            headers:{ "Content-Type":"application/json" },
+            body: JSON.stringify({ message: text })
+        });
+
+        const data = await response.json();
+        loading.remove();
+
+        if(data.error){
+            addMessage("LỖI API: " + data.error,"bot");
+            return;
+        }
+
+        addMessage(data.reply,"bot");
+
+    }catch(error){
+        loading.remove();
+        addMessage("Lỗi kết nối: " + error.message,"bot");
+    }
+}
+
+function addMessage(text,sender){
+    const chatBox=document.getElementById("chatBox");
+    const msg=document.createElement("div");
+    msg.classList.add("message",sender);
+    msg.innerText=text;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop=chatBox.scrollHeight;
+    return msg;
+}
+</script>
+
+</body>
+</html>
